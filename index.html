@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parental Leave Planner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Parental Leave Planner</h1>
+    <form id="leave-planner-form">
+        <label for="due-date">Baby's Due Date:</label>
+        <input type="date" id="due-date" name="due-date" required><br>
+
+        <label for="mothers-leave">Mother's Leave Policy (weeks):</label>
+        <input type="number" id="mothers-leave" name="mothers-leave" required><br>
+
+        <label for="fathers-leave">Father's Leave Policy (weeks):</label>
+        <input type="number" id="fathers-leave" name="fathers-leave" required><br>
+
+        <label for="trip-timing">Desired Trip Timing (months after birth):</label>
+        <input type="number" id="trip-timing" name="trip-timing" min="5" max="6" required><br>
+
+        <label for="grandparent-help">Grandparent Help (weeks):</label>
+        <input type="number" id="grandparent-help" name="grandparent-help"><br>
+
+        <button type="button" onclick="generateLeavePlan()">Generate Leave Plan</button>
+    </form>
+
+    <div id="leave-plan-output"></div>
+    <div id="timeline-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
