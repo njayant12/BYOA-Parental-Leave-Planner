@@ -2,7 +2,8 @@ function generateLeavePlan() {
     const dueDate = new Date(document.getElementById('due-date').value);
     const mothersLeave = parseInt(document.getElementById('mothers-leave').value);
     const fathersLeave = parseInt(document.getElementById('fathers-leave').value);
-    const tripTiming = parseInt(document.getElementById('trip-timing').value);
+    const breakStart = new Date(document.getElementById('break-start-date').value);
+    const breakLength = parseInt(document.getElementById('break-length').value);
     const grandparentHelp = parseInt(document.getElementById('grandparent-help').value) || 0;
 
     // Calculate the timeline
@@ -10,18 +11,23 @@ function generateLeavePlan() {
     const mothersLeaveEnd = new Date(birthDate);
     mothersLeaveEnd.setDate(birthDate.getDate() + mothersLeave * 7);
 
-    const fathersLeaveEnd = new Date(birthDate);
-    fathersLeaveEnd.setDate(birthDate.getDate() + fathersLeave * 7);
+    const breakEnd = new Date(breakStart);
+    breakEnd.setDate(breakStart.getDate() + breakLength * 7);
 
-    const tripDate = new Date(birthDate);
-    tripDate.setMonth(birthDate.getMonth() + tripTiming);
+    // Calculate father's leave segments
+    const resumeDate = new Date(breakEnd);
+    const weeksBeforeBreak = Math.floor((breakStart - birthDate) / (1000 * 60 * 60 * 24 * 7));
+    const remainingWeeks = fathersLeave - weeksBeforeBreak;
+    const fathersLeaveEnd = new Date(resumeDate);
+    fathersLeaveEnd.setDate(resumeDate.getDate() + remainingWeeks * 7);
 
     // Generate the leave plan
     const leavePlan = `
         Baby's Due Date: ${dueDate.toDateString()}\n
         Mother's Leave: ${birthDate.toDateString()} to ${mothersLeaveEnd.toDateString()}\n
-        Father's Leave: ${birthDate.toDateString()} to ${fathersLeaveEnd.toDateString()}\n
-        Desired Trip Date: ${tripDate.toDateString()}\n
+        Father's Leave Segment 1: ${birthDate.toDateString()} to ${breakStart.toDateString()}\n
+        Break/Trip: ${breakStart.toDateString()} to ${breakEnd.toDateString()}\n
+        Father's Leave Segment 2: ${resumeDate.toDateString()} to ${fathersLeaveEnd.toDateString()}\n
         Grandparent Help: ${grandparentHelp} weeks\n
     `;
 
@@ -34,9 +40,10 @@ function generateLeavePlan() {
 
     const events = [
         { label: "Baby's Birth", date: birthDate },
+        { label: "Break/Trip Start", date: breakStart },
+        { label: "Break/Trip End", date: breakEnd },
         { label: "Mother's Leave Ends", date: mothersLeaveEnd },
-        { label: "Father's Leave Ends", date: fathersLeaveEnd },
-        { label: "Trip Date", date: tripDate }
+        { label: "Father's Leave Ends", date: fathersLeaveEnd }
     ];
 
     events.forEach(event => {
